@@ -1,0 +1,83 @@
+{
+  "incidents": [
+    {
+      "id": "131222846",
+      "title": "Критическая ошибка после замены СКЗИ",
+      "description": "После плановой замены СКЗИ в МФЦ Челябинской области перестала проходить проверка подписи пакетов.\n\n2026-11-10 09:12:44 ERROR [sign-verify] CertificateException: certificate chain is incomplete\n2026-11-10 09:12:45 WARN  [exchange] message 7f3a… rejected by gateway",
+      "resolution": null,
+      "createdAt": "2026-11-10T09:15:00+03:00",
+      "firstResponseAt": "2026-11-10T09:24:00+03:00",
+      "resolvedAt": null,
+      "closedAt": null,
+      "priority": "Critical",
+      "status": "In Progress",
+      "assignee": "u-egorov",
+      "configurationItems": ["ci-4003", "ci-1003"]
+    },
+    {
+      "id": "TASK-300001",
+      "title": "Не обрабатываются запросы на проверку в ЦБД",
+      "description": "Запросы из АРМ оператора ГУВМ уходят в таймаут. Пользователь сообщил по телефону.",
+      "resolution": "Перезапущен пул соединений сервиса проверки, увеличен лимит соединений с 50 до 120.",
+      "createdAt": "2026-11-05T12:00:00+03:00",
+      "firstResponseAt": "2026-11-05T12:40:00+03:00",
+      "resolvedAt": "2026-11-05T17:10:00+03:00",
+      "closedAt": "2026-11-06T10:00:00+03:00",
+      "priority": "Major",
+      "status": "Closed",
+      "assignee": "u-orlov",
+      "configurationItems": ["ci-1002", "ci-2001"]
+    },
+    {
+      "id": "TASK-300002",
+      "title": "Не печатается бланк на принтере",
+      "description": "Принтер бланков в МФЦ Новосибирской области не принимает задания печати.",
+      "resolution": null,
+      "createdAt": "2026-11-11T15:30:00+03:00",
+      "firstResponseAt": null,
+      "resolvedAt": null,
+      "closedAt": null,
+      "priority": "Minor",
+      "status": "Open",
+      "assignee": null,
+      "configurationItems": ["ci-5003"]
+    },
+    {
+      "id": "TASK-300003",
+      "title": "Запрос на выгрузку статистики обращений",
+      "description": "Консульский департамент просит выгрузку за октябрь.",
+      "resolution": null,
+      "createdAt": "2026-11-12T10:00:00+03:00",
+      "firstResponseAt": null,
+      "resolvedAt": null,
+      "closedAt": null,
+      "priority": "Trivial",
+      "status": "Waiting",
+      "assignee": "u-unknown",
+      "configurationItems": []
+    }
+  ],
+  "cis": [
+    {
+      "id": "ci-5003",
+      "name": "Принтер бланков МФЦ Новосибирск",
+      "type": "Периферийное устройство",
+      "institutionCode": "005",
+      "ipAddress": "10.5.0.30",
+      "technicalSpecs": "- Модель: лазерный принтер A4\n- Интерфейс: Ethernet",
+      "software": []
+    },
+    {
+      "id": "ci-9001",
+      "name": "Сервер резервного копирования МРЦОД",
+      "type": "Сервер",
+      "institutionCode": "001",
+      "ipAddress": "10.0.0.250",
+      "technicalSpecs": "- ОЗУ: 64 ГБ\n- СХД: 100 ТБ",
+      "software": [
+        { "name": "Astra Linux Special Edition", "version": "1.7", "vendor": "Группа Астра" },
+        { "name": "Bacula", "version": "13", "vendor": "Bacula Systems" }
+      ]
+    }
+  ]
+}

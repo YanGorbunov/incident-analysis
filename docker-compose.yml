@@ -1,0 +1,58 @@
+# Локальный стенд: PostgreSQL + приложение + ежедневные резервные копии.
+#   docker compose up -d --build
+#   открыть http://localhost:8080  (admin / пароль из ADMIN_PASSWORD, по умолчанию admin в профиле demo)
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: incidents
+      POSTGRES_USER: incidents
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-incidents}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U incidents -d incidents"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/incidents
+      DB_USER: incidents
+      DB_PASSWORD: ${DB_PASSWORD:-incidents}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-demo}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+    ports:
+      - "8080:8080"
+
+  # «Модуль резервного копирования» из структурной схемы ВКР (Рис. 3.3).
+  # Резервное копирование — задача инфраструктуры, а не приложения:
+  # pg_dump по расписанию с ротацией (7 дневных, 4 недельных, 6 месячных копий).
+  backup:
+    image: prodrigestivill/postgres-backup-local:17
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: incidents
+      POSTGRES_USER: incidents
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-incidents}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+      BACKUP_KEEP_WEEKS: 4
+      BACKUP_KEEP_MONTHS: 6
+      HEALTHCHECK_PORT: 8080
+    volumes:
+      - ./backups:/backups
+
+volumes:
+  pgdata:
